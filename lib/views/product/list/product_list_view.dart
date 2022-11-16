@@ -29,11 +29,11 @@ class ProductListView extends ConsumerWidget {
         itemBuilder: (context, index) => ListTile(
           key: ValueKey(pM[index].id),
           onTap: () {
-            pC.deleteById(pM[index].id, context);
+            pC.deleteById(pM[index].id);
           },
           onLongPress: () {
             // update 하기
-            pC.updateById(pM[index].id, context, pM[index]);
+            pC.updateById(pM[index].id, pM[index]);
           },
           leading: Icon(Icons.wallet_giftcard),
           title: Text("${pM[index].name}",
