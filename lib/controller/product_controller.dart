@@ -46,8 +46,9 @@ class ProductController {
     }
   }
 
-  void updateById(int id, product) {
-    Product updated = _ref.read(productHttpRepository).updateById(id, product);
-    _ref.read(productListViewStore.notifier).updateProduct(updated);
+  void updateById(int id, Product productReqDto) {
+    Product productRespDto =
+        _ref.read(productHttpRepository).updateById(id, productReqDto);
+    _ref.read(productListViewStore.notifier).updateProduct(productRespDto);
   }
 }

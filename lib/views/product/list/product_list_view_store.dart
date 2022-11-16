@@ -27,7 +27,7 @@ class ProductListViewStore extends StateNotifier<List<Product>> {
   void updateProduct(productRespDto) {
     state = state.map((product) {
       if (product.id == productRespDto.id) {
-        product = productRespDto;
+        product.price = 8888888;
         return product;
       } else {
         return product;
