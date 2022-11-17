@@ -4,11 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final productListViewStore =
     StateNotifierProvider<ProductListViewStore, List<Product>>((ref) {
-  return ProductListViewStore(ref.read(productHttpRepository).list);
+  return ProductListViewStore([], ref)..initViewModel();
 });
 
 class ProductListViewStore extends StateNotifier<List<Product>> {
-  ProductListViewStore(super.state);
+  Ref _ref;
+  ProductListViewStore(super.state, this._ref);
+
+  void initViewModel() async {
+    List<Product> pList = await _ref.read(productHttpRepository).findAll();
+    state = pList;
+  }
 
   //컨트롤러에서 이것을 호출 함
   void onRefresh(List<Product> productList) {

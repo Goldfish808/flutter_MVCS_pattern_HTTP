@@ -21,10 +21,21 @@ class ProductListView extends ConsumerWidget {
           pC.findAll();
         },
       ),
-      appBar: AppBar(
-        title: Text("product_list_page"),
-      ),
-      body: ListView.builder(
+      appBar: AppBar(title: Text("product_list_page")),
+      body: _buildListView(pM, pC),
+    );
+  }
+
+  Widget _buildListView(List<Product> pM, pC) {
+    if (!(pM.length > 0)) {
+      return Center(
+          child: Image.asset(
+        "assets/image/loading.gif",
+        width: 88,
+        height: 88,
+      ));
+    } else {
+      return ListView.builder(
         itemCount: pM.length,
         itemBuilder: (context, index) => ListTile(
           key: ValueKey(pM[index].id),
@@ -40,7 +51,7 @@ class ProductListView extends ConsumerWidget {
               style: TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text("${pM[index].price}" + " 원"),
         ),
-      ),
-    );
+      );
+    }
   }
 }
