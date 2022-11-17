@@ -21,7 +21,7 @@ class ProductListViewStore extends StateNotifier<List<Product>> {
     state = productList;
   }
 
-  void addProduct(Product productRespDto) {
+  void addProduct(Product productRespDto) async {
     state = [...state, productRespDto]; //깊은 복사
     //state.add(productRespDto); //기존값을 변경, 이는 작동하지 않음
   }
@@ -30,11 +30,10 @@ class ProductListViewStore extends StateNotifier<List<Product>> {
     state = state.where((product) => product.id != id).toList(); //깊은 복사
   }
 
-  void updateProduct(productRespDto) {
+  void updateProduct(Product productRespDto) {
     state = state.map((product) {
       if (product.id == productRespDto.id) {
-        product.price = 8888888;
-        return product;
+        return productRespDto;
       } else {
         return product;
       }

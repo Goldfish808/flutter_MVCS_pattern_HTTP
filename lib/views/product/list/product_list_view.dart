@@ -1,6 +1,5 @@
 import 'package:data_app/controller/product_controller.dart';
 import 'package:data_app/domain/product/product.dart';
-import 'package:data_app/views/components/my_alert_dialog.dart';
 import 'package:data_app/views/product/list/product_list_view_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ class ProductListView extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          pC.findAll();
+          pC.insert(Product(id: 0, name: "호박장군", price: 5000));
         },
       ),
       appBar: AppBar(title: Text("product_list_page")),
@@ -26,7 +25,7 @@ class ProductListView extends ConsumerWidget {
     );
   }
 
-  Widget _buildListView(List<Product> pM, pC) {
+  Widget _buildListView(List<Product> pM, ProductController pC) {
     if (!(pM.length > 0)) {
       return Center(
           child: Image.asset(
@@ -44,7 +43,8 @@ class ProductListView extends ConsumerWidget {
           },
           onLongPress: () {
             // update 하기
-            pC.updateById(pM[index].id, pM[index]);
+            pC.updateById(
+                pM[index].id, Product(id: 0, name: "호박장군", price: 8888));
           },
           leading: Icon(Icons.wallet_giftcard),
           title: Text("${pM[index].name}",

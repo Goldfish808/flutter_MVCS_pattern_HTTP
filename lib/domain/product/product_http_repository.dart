@@ -57,32 +57,51 @@ class ProductHttpRepository {
   }
 
   // name 과 price 만 입력 받게 됨
-  Product insert(Product productDto) {
-    productDto.id = 4; //http 통신에서 insert되고 부여받은 id (4)를 리턴 받았다고 가정
-    list = [...list, productDto];
-    return productDto;
+  Future<Product> insert(Product productDto) async {
+    // productDto.id = 4; //http 통신에서 insert되고 부여받은 id (4)를 리턴 받았다고 가정
+    // list = [...list, productDto];
+    String body = jsonEncode(productDto.toJson());
+    Response response =
+        await _ref.read(httpConnector).post("/api/product", body);
+    Product product = Product.fromJson(jsonDecode(response.body)["data"]);
+    return product;
   }
 
-  Product updateById(int id, Product productDto) {
-    List<Product> updatePList = list.map((product) {
-      if (product.id == id) {
-        product = productDto;
-        return product;
-      } else {
-        return product;
-      }
-    }).toList();
-    productDto.id;
-    return productDto;
+  Future<int> deleteById(int id) async {
+    Response response =
+        await _ref.read(httpConnector).delete("/api/product/${id}");
+    return jsonDecode(response.body)["code"];
   }
 
-  int deleteById(int id) {
-    if (id == 4) {
-      return -1;
-    } else {
-      return 1;
-    }
-    List<Product> deleteP = list.where((product) => product.id != id).toList();
-    return 1;
+  Future<Product> updateById(int id, Product productReqDto) async {
+    String body = jsonEncode(productReqDto.toJson());
+    Response response =
+        await _ref.read(httpConnector).put("/api/product/${id}", body);
+    Product product = Product.fromJson(jsonDecode(response.body)["data"]);
+    return product;
   }
+
+  // Product updateById(int id, Product productDto) { //통신 전
+  //   List<Product> updatePList = list.map((product) {
+  //     if (product.id == id) {
+  //       product = productDto;
+  //       return product;
+  //     } else {
+  //       return product;
+  //     }
+  //   }).toList();
+  //   productDto.id;
+  //   return productDto;
+  // }
+
+  // int deleteById(int id) { //통신 전
+  //   // if (id == 4) { // 4 인 요소는 삭제 안되게 하려했던 실습
+  //   //   return -1;
+  //   // } else {
+  //   //   return 1;
+  //   // }
+  //
+  //   // List<Product> deleteP = list.where((product) => product.id != id).toList();
+  //   // return 1;
+  // }
 }

@@ -29,27 +29,27 @@ class ProductController {
     _ref.read(productListViewStore.notifier).onRefresh(productList);
   }
 
-  void insert(Product productReqDto) {
+  void insert(Product productReqDto) async {
     Product productRespDto =
-        _ref.read(productHttpRepository).insert(productReqDto);
+        await _ref.read(productHttpRepository).insert(productReqDto);
     _ref.read(productListViewStore.notifier).addProduct(productRespDto);
   }
 
-  void deleteById(int id) {
-    int result = _ref.read(productHttpRepository).deleteById(id);
-    if (result == 1) {
+  void deleteById(int id) async {
+    int code = await _ref.read(productHttpRepository).deleteById(id);
+    if (code == 1) {
       _ref.read(productListViewStore.notifier).removeProduct(id);
     } else {
       showCupertinoDialog(
-          context: context, builder: (context) => MyAlertDialog(msg: "삭제 실패"));
-      //값을 변경!! store에!!
-      //_ref.listen(productListViewStore, (previous, next) {});
+        context: context,
+        builder: (context) => MyAlertDialog(msg: "삭제 실패"),
+      );
     }
   }
 
-  void updateById(int id, Product productReqDto) {
+  void updateById(int id, Product productReqDto) async {
     Product productRespDto =
-        _ref.read(productHttpRepository).updateById(id, productReqDto);
+        await _ref.read(productHttpRepository).updateById(id, productReqDto);
     _ref.read(productListViewStore.notifier).updateProduct(productRespDto);
   }
 }
