@@ -23,8 +23,10 @@ class ProductController {
   ProductController(this._ref);
 
   //리프레시 할때 씀
-  void findAll() {
-    _ref.read(productHttpRepository).findAll();
+  void findAll() async {
+    List<Product> productList =
+        await _ref.read(productHttpRepository).findAll();
+    _ref.read(productListViewStore.notifier).onRefresh(productList);
   }
 
   void insert(Product productReqDto) {
