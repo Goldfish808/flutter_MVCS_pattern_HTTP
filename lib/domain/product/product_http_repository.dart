@@ -1,17 +1,47 @@
+import 'dart:convert';
+
+import 'package:data_app/domain/http_connector.dart';
 import 'package:data_app/domain/product/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
 
 // Provider 창고에 넣음 HTTP 통신으로 받은 데이터를
-final productHttpRepository = Provider((ref) {
-  return ProductHttpRepository();
+final productHttpRepository = Provider<ProductHttpRepository>((ref) {
+  return ProductHttpRepository(ref);
 });
 
 class ProductHttpRepository {
+  final Ref _ref;
+  ProductHttpRepository(this._ref);
+
   List<Product> list = [
-    Product(1, "바나나", 2000),
-    Product(2, "딸기", 2000),
-    Product(3, "야플", 2000)
+    Product(id: 1, name: "바나나", price: 2000),
+    Product(id: 2, name: "사과", price: 2000),
+    Product(id: 3, name: "애플", price: 2000)
   ];
+
+  Future<List<Product>> findAll() async {
+    Response response = await _ref.read(httpConnector).get("/api/product");
+    List<dynamic> dataList = jsonDecode(response.body)["data"];
+    return dataList.map((productMap) => Product.fromJson(productMap)).toList();
+
+    // Response response = await _ref.read(httpConnector).get("/api/product");
+    // //Future 로 받기 때문에 await 가 필요함 ( 요청 대기까진 NULL 이기 때문에 )
+    // print("${response.statusCode}");
+    //
+    // Map<String, dynamic> body = jsonDecode(response.body);
+    // //언제 어떤 데이터의 타입일줄 모르니까 dynamic 타입으로 받음 (자바의 OBject)
+    // print("${body}");
+    // if (body["code"] == 1) {
+    //   print("통신성공");
+    //   List<dynamic> dataList = body["data"];
+    //
+    //   List<Product> productList = //for문 돌면서 타입에 맞게 매핑 해줌
+    //       dataList.map((productMap) => Product.fromJson(productMap)).toList();
+    // } else {
+    //   print("통신실패");
+    // }
+  }
 
   Product findById(int id) {
     //http 통신 코드 By 스프링의 API 문서에 따라서
@@ -24,10 +54,6 @@ class ProductHttpRepository {
     */
     Product product = list.singleWhere((product) => product.id == id);
     return product;
-  }
-
-  List<Product> findAll() {
-    return list;
   }
 
   // name 과 price 만 입력 받게 됨

@@ -18,7 +18,7 @@ class ProductListView extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          pC.insert(Product(4, "비둘기", 8888));
+          pC.findAll();
         },
       ),
       appBar: AppBar(

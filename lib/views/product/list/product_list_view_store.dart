@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final productListViewStore =
     StateNotifierProvider<ProductListViewStore, List<Product>>((ref) {
-  return ProductListViewStore(ref.read(productHttpRepository).findAll());
+  return ProductListViewStore(ref.read(productHttpRepository).list);
 });
 
 class ProductListViewStore extends StateNotifier<List<Product>> {

@@ -24,8 +24,7 @@ class ProductController {
 
   //리프레시 할때 씀
   void findAll() {
-    List<Product> productList = _ref.read(productHttpRepository).findAll();
-    _ref.read(productListViewStore.notifier).onRefresh(productList);
+    _ref.read(productHttpRepository).findAll();
   }
 
   void insert(Product productReqDto) {
